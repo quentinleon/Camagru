@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+
+	<script language="javascript">
+		$(function(){
+			$("#getstuff").click(function(){
+				$("#dyntext").load("/ttinfo");
+			});
+		});
+		$(function(){
+			$("#a").click(function(){
+				$.post( "a");
+			});
+		});
+		$(function(){
+			$("#d").click(function(){
+				$.post( "d");
+			});
+		});
+	</script>
+
+	<div class="container">
+		<div class="row">
+			<div class="col-6">
+				<div class="row">
+					<div class="btn-group" role="group" aria-label="Basic example">
+						<button id="a" type="button" class="btn btn-success">Auth</button>
+						<button id="d" type="button" class="btn btn-danger">De-Auth</button>
+					</div>
+				</div>
+				</br>
+				<div class="row">
+					<button id="getstuff" type="button" class="btn btn-secondary">Check auth token.</button>
+				</div>
+			</div>
+			<div class="col-6">
+				<div id="dyntext">
+
+				</div>
+			</div>
+		</div>
+		<br>
+		<p>Try modifying the "loggedInAs" cookie.</p>
+	</div>
+
+</body>
+</html>
