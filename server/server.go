@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-var staticDir = "client/"
+var staticDir = "client"
 
 func ttinfo(w http.ResponseWriter, r *http.Request) {
 	c, err := r.Cookie("loggedInAs")
@@ -55,15 +55,49 @@ func stuff(w http.ResponseWriter, r *http.Request) {
 func signupsubmit(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
 		http.Redirect(w, r, "/stuff", 303)
+	} else {
+		staticAsset(w, r)
 	}
 }
 
+func redirectURL(w http.ResponseWriter, r *http.Request, url string, loggedIn bool) bool {
+	if loggedIn == true {
+		if url == "/signup.html" || url == "/login.html" || url == "/" {
+			http.Redirect(w, r, "/gallery", 303)
+			return true
+		}
+	} else {
+		switch url {
+		case "/editor.html":
+			http.Redirect(w, r, "/signup", 303)
+			return true
+		case "/account.html":
+			http.Redirect(w, r, "/", 303)
+			return true
+		}
+	}
+	return false
+}
+
 func staticAsset(w http.ResponseWriter, r *http.Request) {
+	c, err := r.Cookie("loggedInAs")
+	loggedIn := false
+	if err == nil {
+		loggedIn = verifyToken(c.Value)
+	}
+
+	//append .html to any sources
 	if !strings.HasSuffix(r.URL.Path, ".html") && r.URL.Path != "/" {
 		r.URL.Path += ".html"
 	}
-	if _, err := os.Stat(staticDir + r.URL.Path[1:]); err == nil {
-		http.ServeFile(w, r, staticDir+r.URL.Path[1:])
+
+	if redirectURL(w, r, r.URL.Path, loggedIn) {
+		return
+	}
+
+	//serve fileserver content
+	if _, err := os.Stat(staticDir + r.URL.Path); err == nil {
+		http.ServeFile(w, r, staticDir+r.URL.Path)
 	} else if os.IsNotExist(err) {
 		w.WriteHeader(404)
 		http.ServeFile(w, r, staticDir+"404.html")
@@ -86,3 +120,7 @@ func main() {
 	fmt.Println("Listening...")
 	http.ListenAndServe(":8080", nil)
 }
+
+/*func main() {
+	db, err := sql.Open("mysql", "root:strongpass@/dbname")
+}*/

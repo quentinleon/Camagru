@@ -2,13 +2,32 @@
 <html>
 <body>
 
-<form action="/signupsubmit" method="POST">
-	First name:<br>
-	<input type="text" name="firstname" value="Mickey"><br>
-	Last name:<br>
-	<input type="text" name="lastname" value="Mouse"><br><br>
-	<input type="submit" value="Submit">
-</form>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+	<div class="container-fluid">
+		<div class="row justify-content-center">
+			<div class="col-2">
+				<form action="signupsubmit" method="POST">
+					<h2>Sign Up</h2>
+					<div class="row">
+						<input type="email" id="email" placeholder="Email">
+					</div>
+					<div class="row">
+						<input type="text" id="fullname" placeholder="Full Name">
+					</div>
+					<div class="row">
+						<input type="text" id="username" placeholder="Username">
+					</div>
+					<div class="row">
+						<input type="password" id="password" placeholder="Password">
+					</div>
+					<div class="row">
+						<button type="submit" class="btn btn-primary">Submit</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
 
 </body>
 </html>

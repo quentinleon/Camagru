@@ -21,6 +21,9 @@ func generateToken(json string) string {
 
 func verifyToken(token string) bool {
 	splitToken := strings.Split(token, ".")
+	if len(splitToken) != 2 {
+		return false
+	}
 	msg := splitToken[0]
 	actsig := splitToken[1]
 
