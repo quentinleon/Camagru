@@ -9,8 +9,8 @@ import (
 
 var secret = "very secret secret"
 
-func generateToken(json string) string {
-	msg := base64.StdEncoding.EncodeToString([]byte(json))
+func generateToken(content string) string {
+	msg := base64.StdEncoding.EncodeToString([]byte(content))
 
 	mac := hmac.New(sha256.New, []byte(secret))
 	mac.Write([]byte(msg))
@@ -19,26 +19,20 @@ func generateToken(json string) string {
 	return msg + "." + sig
 }
 
-func verifyToken(token string) bool {
-	splitToken := strings.Split(token, ".")
-	if len(splitToken) != 2 {
-		return false
-	}
-	msg := splitToken[0]
-	actsig := splitToken[1]
-
-	mac := hmac.New(sha256.New, []byte(secret))
-	mac.Write([]byte(msg))
-	expsig := base64.StdEncoding.EncodeToString(mac.Sum(nil))
-
-	return actsig == expsig
-}
-
 func getTokenContent(token string) string {
 	splitToken := strings.Split(token, ".")
 	msg, err := base64.StdEncoding.DecodeString(splitToken[0])
-	if err != nil {
+	if err != nil || len(splitToken) != 2 {
+		//TODO log malformed token
 		return "error"
 	}
 	return string(msg)
+}
+
+func verifyToken(token string) bool {
+	if token != generateToken(getTokenContent(token)) {
+		//TODO log invalid token
+		return false
+	}
+	return true
 }
